@@ -1,8 +1,27 @@
-# Hanako Web Access
+<p align="center">
+  <img src="docs/banner.svg" alt="Hanako Web Access banner" width="100%" />
+</p>
 
-把日常 Chrome 真正接进 OpenHanako 的插件。
+<h1 align="center">Hanako Web Access</h1>
+
+<p align="center">把日常 Chrome 真正接进 OpenHanako</p>
+
+<p align="center">
+  <a href="https://github.com/huanyu16/hanako-web-access">GitHub</a> ·
+  <a href="https://huanyu16.github.io/hanako-web-access/">介绍页</a>
+</p>
 
 > 不是给 Agent 再开一个独立浏览器实例。是让 Hanako 直接连接你平时正在用的 Chrome，复用登录态，在后台标签页里完成真实网页任务。
+
+## 为什么值得装
+
+很多 Agent 的浏览器能力，不是不能点网页，而是**接入的浏览器环境不对**。
+
+- 独立浏览器实例：隔离是隔离了，但登录态断了
+- Search / Fetch：查静态网页够用，但遇到登录态和 JS 重页面就天然失效
+- 复杂站点：真正需要的是进入用户现有 Chrome，在后台标签页里把事情做完
+
+这个插件干的就是这件事。
 
 ## 这是什么
 
@@ -12,6 +31,12 @@
 - 用 `tools/` 暴露浏览器能力
 - 用插件私有 `dataDir` 存储站点经验
 - 用插件自身的 CDP proxy 连接用户现有 Chrome
+
+## 一眼看懂工作方式
+
+<p align="center">
+  <img src="docs/overview.svg" alt="workflow overview" width="100%" />
+</p>
 
 ## 它解决什么问题
 
@@ -40,6 +65,20 @@ Hanako 原生的轻量 web 能力适合：
 - 文件上传
 - 关闭插件自己创建的 tab
 - 站点经验按域名沉淀
+
+## 最小示例
+
+对 Agent 说：
+
+```text
+遵循 web-access skill，打开 https://example.com ，读取页面标题和正文摘要，完成后关闭标签页。
+```
+
+更复杂一点：
+
+```text
+遵循 web-access skill，直接用 Chrome 工具进入目标网站，不要先在静态工具上反复试错。优先在后台 tab 中完成站内搜索、读取正文、必要时截图，任务完成后关闭标签页。
+```
 
 ## 安全边界
 
@@ -93,20 +132,6 @@ rsync -a ./ ~/.hanako/plugins/hanako-web-access/
 - `hanako-web-access_chrome_get_site_pattern`
 - `hanako-web-access_chrome_list_site_patterns`
 
-## 推荐用法
-
-对 Agent 说：
-
-```text
-遵循 web-access skill，打开 https://example.com ，读取页面标题和正文摘要，完成后关闭标签页。
-```
-
-更复杂的例子：
-
-```text
-遵循 web-access skill，直接用 Chrome 工具进入目标网站，不要先在静态工具上反复试错。优先在后台 tab 中完成站内搜索、读取正文、必要时截图，任务完成后关闭标签页。
-```
-
 ## 站点经验沉淀
 
 插件会在成功读取站点后，按域名写入轻量经验文件，保存到：
@@ -120,6 +145,26 @@ rsync -a ./ ~/.hanako/plugins/hanako-web-access/
 - 不写没有验证的猜测
 - 把经验当提示，不当真理
 
+## 适合什么 / 不适合什么
+
+| 场景 | 建议 |
+|---|---|
+| 官网、文档、博客、公开静态页 | 优先 Hanako 原生 web 工具 |
+| 登录态页面、JS 重页面 | 切到本插件 |
+| 站内搜索、点击、上传、发布 | 切到本插件 |
+| 轻量事实查询 | 不要过度上浏览器 |
+
+## FAQ
+
+### 1. 为什么不直接改 Hanako 内核？
+因为 Hanako 更新很快。直接修改内核，短期省事，长期一定变成维护负担。插件化接入可以把维护面收缩到插件本身。
+
+### 2. 这个插件会不会抢我浏览器控制权？
+默认不会。它只操作自己创建的标签页，不碰你原有标签页。
+
+### 3. 它会取代 Hanako 原生 web 工具吗？
+不会。它是更重的一档。静态网页继续用原生工具，复杂网页再升级到本插件。
+
 ## 项目结构
 
 ```text
@@ -132,21 +177,10 @@ hanako-web-access/
 └── docs/
 ```
 
-## 为什么做成插件，而不是改 Hanako 内核
-
-因为 Hanako 更新很快。
-
-直接修改内核，短期省事，长期一定变成维护负担。插件化接入的好处是：
-- 对 Hanako 主仓库零侵入
-- 更抗上游更新
-- 出问题时只修插件，不需要反复 patch Hanako
-
 ## 介绍页
 
-项目介绍页：
 - `docs/index.html`
-
-可直接用 GitHub Pages 部署。
+- GitHub Pages：<https://huanyu16.github.io/hanako-web-access/>
 
 ## License
 
