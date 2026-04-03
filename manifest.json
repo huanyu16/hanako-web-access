@@ -1,0 +1,29 @@
+{
+  "id": "hanako-web-access",
+  "name": "Hanako Web Access",
+  "version": "0.1.0",
+  "description": "Chrome CDP-based web access for OpenHanako, adapted from the web-access architecture.",
+  "trust": "full-access",
+  "minAppVersion": "0.89.0",
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "proxyPort": {
+          "type": "number",
+          "default": 3456,
+          "title": "CDP Proxy Port"
+        },
+        "autoStartProxy": {
+          "type": "boolean",
+          "default": true,
+          "title": "Auto-start CDP proxy"
+        },
+        "allowOperateNonOwnedTabs": {
+          "type": "boolean",
+          "default": false,
+          "title": "Allow operating non-owned Chrome tabs"
+        }
+      }
+    }
+  }
+}
